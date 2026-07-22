@@ -1,0 +1,19 @@
+name: Build and Deploy
+
+on:
+    push:
+        branches: ["main"]
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Check out code
+              uses: actions/checkout@v3
+
+            - name: Test Docker Build
+              run: docker build . -t test-image
+
+            - name: Trigger Render Deployment
+              run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
